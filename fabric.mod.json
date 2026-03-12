@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "arenix",
+  "version": "${project.version}",
+  "name": "Arenix",
+  "description": "A simple Minecraft Fabric mod.",
+  "authors": [
+    "YourName"
+  ],
+  "contact": {
+    "homepage": "https://github.com/yourusername/arenix",
+    "sources": "https://github.com/yourusername/arenix"
+  },
+  "license": "MIT",
+  "icon": "assets/arenix/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "com.arenix.ArenixClient"
+    ],
+    "main": [
+      "com.arenix.ArenixClient"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.15.11",
+    "fabric-api": "*",
+    "minecraft": ">=1.21.4"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}

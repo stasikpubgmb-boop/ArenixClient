@@ -1,0 +1,10 @@
+// Settings file for the Arenix Minecraft Fabric mod.
+
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        maven("https://maven.fabricmc.net/")
+    }
+}
+
+rootProject.name = "Arenix"
