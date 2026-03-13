@@ -1,70 +1,45 @@
 plugins {
-    id "fabric-loom" version "1.7.0"
-    id "java"
-    id "maven-publish"
+    id 'fabric-loom' version '1.6-SNAPSHOT'
+    id 'java'
 }
 
-version = "1.0.0" // Replace with your desired mod version.
+group = 'com.arenix.client'
+version = '1.0.0'
 
-// Assuming you have a mod_id property in gradle.properties.
-// If not, you can define it here or directly use a string.
-ext.modId = project.hasProperty("mod_id") ? project.mod_id : "arenix"
-
-archivesBaseName = "${modId}-${project.version}"
-
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(17) // Use Java 17 as per gradle.properties
+repositories {
+    mavenCentral()
+    maven {
+        name "Fabric"
+        url "https://maven.fabricmc.net/"
     }
-}
-
-minecraft {
-    version = project.hasProperty("minecraft_version") ? project.minecraft_version : "1.21.4"
-    mappings = "1.21.4+build.5" // You might need to adjust this based on fabric-loom recommendations
-    defaultAcessMarkerVersion = "0.11.3" // Recommended for fabric-loom 1.7.0
 }
 
 dependencies {
-    minecraft "com.mojang:minecraft:${minecraft.version}"
-    // Use the Fabric Loader API.
-    // Note: This is for the runtime, not for building the mod.
-    // The fabric-loom plugin handles the development environment.
-    modImplementation "net.fabricmc:fabric-loader:${project.hasProperty("fabric_loader_version") ? project.fabric_loader_version : "0.15.11"}"
-    // The Fabric API is a collection of APIs that are commonly used by mods.
-    // It's an optional dependency, but highly recommended.
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.hasProperty("fabric_api_version") ? project.fabric_api_version : "0.100.0+1.21.4"}"
+    // Fabric
+    minecraft "com.mojang:minecraft:1.21.4"
+    mappings "$project.group:yarn:$minecraft_version+build.mapping:release"
+    modImplementation "net.fabricmc:fabric-loader:$fabric_loader_version"
+
+    // Fabric API
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+
+    // Mixin
+    modImplementation "net.fabricmc:fabric-api:${project.fabric_api_version}" // For mixin support
 }
 
-// Task to generate the fabric.mod.json from build.gradle.
-// This is a good practice for keeping mod metadata in one place.
-// However, for this example, we will create a separate fabric.mod.json file.
-// If you want to auto-generate, uncomment and configure the following:
-// fabricModJson {
-//     modId = modId
-//     version = project.version
-//     name = "Arenix" // Your mod name
-//     entryPoints {
-//         client = ["com.example.arenix.ArenixClient"] // Your main client class
-//     }
-//     authors = ["Your Name"]
-//     contact {
-//         homepage = "https://example.com"
-//         sources = "https://github.com/YourUsername/Arenix"
-//     }
-//     icon = "assets/arenix/icon.png"
-// }
+// Task to run the game
+loom {
+    accessWidenerPath = file("src/main/resources/arenixclient.accesswidener") // Specify access widener file
+}
 
-// Publication configuration for Maven.
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-        }
-    }
+java {
+    withJavadoc()
+}
 
-    // Repositories can be configured here if you want to publish your mod.
-    // For example, to publish to a local Maven repository:
-    // repositories {
-    //     mavenLocal()
-    // }
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = "UTF-8"
+}
+
+tasks.register('clean', Delete) {
+    delete rootProject.buildDir
 }
