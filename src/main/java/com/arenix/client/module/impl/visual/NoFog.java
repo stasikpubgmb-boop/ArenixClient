@@ -13,17 +13,13 @@ public class NoFog extends Module {
 
     @Override
     public void onEnable() {
-        super.onEnable();
-        MinecraftClient client = MinecraftClient.getInstance();
-        GameOptions options = client.options;
+        GameOptions options = MinecraftClient.getInstance().options;
         options.fogFancy = false;
     }
 
     @Override
     public void onDisable() {
-        super.onDisable();
-        MinecraftClient client = MinecraftClient.getInstance();
-        GameOptions options = client.options;
+        GameOptions options = MinecraftClient.getInstance().options;
         options.fogFancy = true;
     }
 }

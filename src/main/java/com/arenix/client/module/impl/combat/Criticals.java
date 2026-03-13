@@ -15,14 +15,12 @@ public class Criticals extends Module {
 
     @Override
     public void onTick() {
-        super.onTick();
-        MinecraftClient client = MinecraftClient.getInstance();
-        if (client.player != null && client.world != null) {
-            PlayerEntity player = client.player;
-            for (Entity entity : client.world.getEntities()) {
+        PlayerEntity player = MinecraftClient.getInstance().player;
+        if (player != null) {
+            for (Entity entity : MinecraftClient.getInstance().world.getEntities()) {
                 if (entity instanceof LivingEntity) {
                     LivingEntity livingEntity = (LivingEntity) entity;
-                    // Attack the entity with critical hit
+                    // Attack entity with critical hit
                 }
             }
         }

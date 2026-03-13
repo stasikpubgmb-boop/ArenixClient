@@ -1,6 +1,7 @@
 package com.arenix.client.gui;
 
 import com.arenix.ArenixClient;
+import com.arenix.module.Category;
 import com.arenix.module.Module;
 import com.arenix.module.ModuleManager;
 import net.minecraft.client.MinecraftClient;
@@ -19,27 +20,15 @@ public class HUD {
     public void render(MatrixStack matrices, float tickDelta) {
         for (Module module : moduleManager.getModules()) {
             if (module.isEnabled()) {
-                // Render module name with keybind
-                String moduleName = module.getName();
-                String keybind =-moduleManager.getModuleByName(moduleName).getCategory().getName();
-                String text = moduleName + " (" + keybind + ")";
-
-                // Render text with rainbow color
-                int color = ColorHelper.Argb.getArgb(255, (int) (Math.sin(tickDelta * 0.1) * 128 + 128), (int) (Math.cos(tickDelta * 0.1) * 128 + 128), 255);
-                matrices.push();
-                matrices.translate(x, y, 0);
-                client.textRenderer.drawWithShadow(matrices, text, 0, 0, color);
-                matrices.pop();
+                drawModule(matrices, module, x, y);
                 y += 10;
             }
         }
     }
 
-    public void handleMouse(int mouseX, int mouseY, int button) {
-        // Handle mouse click
-        if (button == 0) {
-            x = mouseX;
-            y = mouseY;
-        }
+    private void drawModule(MatrixStack matrices, Module module, int x, int y) {
+        fill(matrices, x, y, x + 100, y + 10, new Color(50, 50, 50, 255).getRGB());
+
+        drawTextWithShadow(matrices, client.textRenderer, module.getName(), x + 10, y + 5, new Color(255, 255, 255, 255).getRGB());
     }
 }

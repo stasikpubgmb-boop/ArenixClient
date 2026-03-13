@@ -1,0 +1,13 @@
+{
+  "mixins": [
+    {
+      "client": {
+        "mixins": [
+          "com.arenix.client.mixin.MixinClientPlayerEntity",
+          "com.arenix.client.mixin.MixinClientPlayerInteractionManager",
+          "com.arenix.client.mixin.MixinGameRenderer"
+        ]
+      }
+    }
+  ]
+}

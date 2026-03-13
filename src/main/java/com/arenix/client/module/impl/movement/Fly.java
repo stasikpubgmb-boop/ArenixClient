@@ -2,19 +2,24 @@ package com.arenix.client.module.impl.movement;
 
 import com.arenix.module.Category;
 import com.arenix.module.Module;
+import com.arenix.module.SliderSetting;
 import net.minecraft.entity.player.PlayerEntity;
 
-public class NoFall extends Module {
+public class Fly extends Module {
 
-    public NoFall() {
-        super("NoFall", Category.MOVEMENT);
+    private final SliderSetting speedSetting = new SliderSetting(5, 1, 10);
+
+    public Fly() {
+        super("Fly", Category.MOVEMENT);
     }
 
     @Override
     public void onTick() {
         PlayerEntity player = MinecraftClient.getInstance().player;
         if (player != null) {
-            player.fallDistance = 0f;
+            double speed = speedSetting.getValue();
+
+            // Fly movement
         }
     }
 }

@@ -2,15 +2,7 @@ package com.arenix.client.module.impl.combat;
 
 import com.arenix.module.Category;
 import com.arenix.module.Module;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.option.KeyBinding;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.RaycastContext;
 
 public class Scaffold extends Module {
 
@@ -20,15 +12,12 @@ public class Scaffold extends Module {
 
     @Override
     public void onTick() {
-        super.onTick();
-        if (MinecraftClient.getInstance().player != null && MinecraftClient.getInstance().world != null) {
-            PlayerEntity player = MinecraftClient.getInstance().player;
-            if (player.isOnGround()) {
-                return;
-            }
-            if (isBlockBelowAir(player)) {
-                placeBlockBelowPlayer(player);
-            }
+        PlayerEntity player = MinecraftClient.getInstance().player;
+        if (player != null && player.isOnGround()) {
+            return;
+        }
+        if (isBlockBelowAir(player)) {
+            placeBlockBelowPlayer(player);
         }
     }
 

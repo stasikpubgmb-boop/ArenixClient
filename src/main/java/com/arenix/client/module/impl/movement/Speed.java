@@ -2,28 +2,32 @@ package com.arenix.client.module.impl.movement;
 
 import com.arenix.module.Category;
 import com.arenix.module.Module;
+import com.arenix.module.SliderSetting;
+import com.arenix.module.ModeSetting;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.option.KeyBinding;
 import net.minecraft.entity.player.PlayerEntity;
 
 public class Speed extends Module {
 
-    private double speed = 5;
-    private KeyBinding keyBinding;
+    private final ModeSetting modeSetting = new ModeSetting("Strafe", List.of("Strafe", "Vanilla"));
+    private final SliderSetting speedSetting = new SliderSetting(5, 1, 10);
 
     public Speed() {
         super("Speed", Category.MOVEMENT);
-        keyBinding = new KeyBinding("key.speed", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_R, "category.movement");
     }
 
     @Override
     public void onTick() {
-        super.onTick();
-        MinecraftClient client = MinecraftClient.getInstance();
-        if (client.player != null && client.world != null && client.options.forwardKey.isPressed() && keyBinding.wasPressed()) {
-            PlayerEntity player = client.player;
-            double speed = this.speed;
-            player.setVelocity(player.getVelocity().x * speed, player.getVelocity().y, player.getVelocity().z * speed);
+        PlayerEntity player = MinecraftClient.getInstance().player;
+        if (player != null) {
+            String mode = modeSetting.getValue();
+            double speed = speedSetting.getValue();
+
+            if (mode.equals("Strafe")) {
+                // Strafe movement
+            } else if (mode.equals("Vanilla")) {
+                // Vanilla movement
+            }
         }
     }
 }

@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ClickGUI extends Screen {
+
     private final MinecraftClient client = MinecraftClient.getInstance();
     private final ModuleManager moduleManager = ArenixClient.INSTANCE.getModuleManager();
     private final List<Module> modules = new ArrayList<>();
@@ -32,71 +33,33 @@ public class ClickGUI extends Screen {
 
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        // Draw background
-        fill(matrices, 0, 0, width, height, ColorHelper.Argb.getArgb(100, 0, 0, 0));
+        fill(matrices, 0, 0, width, height, new Color(0, 0, 0, 128).getRGB());
 
-        // Draw category panels
-        int panelX = 10;
-        int panelY = 10;
-        for (Category category : Category.values()) {
-            // Draw panel background
-            fill(matrices, panelX, panelY, panelX + 200, panelY + 20, ColorHelper.Argb.getArgb(255, 50, 50, 50));
-
-            // Draw panel header
-            drawHeader(matrices, category, panelX, panelY);
-
-            // Draw modules in panel
-            drawModules(matrices, category, panelX, panelY + 20);
-
-            panelX += 210;
-        }
-
-        // Draw search bar
-        drawSearchBar(matrices, mouseX, mouseY);
-    }
-
-    private void drawHeader(MatrixStack matrices, Category category, int x, int y) {
-        // Draw header background
-        fill(matrices, x, y, x + 200, y + 20, ColorHelper.Argb.getArgb(255, 100, 100, 100));
-
-        // Draw category name
-        drawTextWithShadow(matrices, client.textRenderer, category.getName(), x + 10, y + 5, ColorHelper.Argb.getArgb(255, 255, 255, 255));
-    }
-
-    private void drawModules(MatrixStack matrices, Category category, int x, int y) {
-        int moduleY = y;
-        for (Module module : moduleManager.getModulesByCategory(category)) {
-            // Draw module background
-            int moduleX = x;
-            int moduleHeight = 20;
-            fill(matrices, moduleX, moduleY, moduleX + 200, moduleY + moduleHeight, module.isEnabled() ? ColorHelper.Argb.getArgb(255, 0, 255, 0) : ColorHelper.Argb.getArgb(255, 50, 50, 50));
-
-            // Draw module name
-            drawTextWithShadow(matrices, client.textRenderer, module.getName(), moduleX + 10, moduleY + 5, ColorHelper.Argb.getArgb(255, 255, 255, 255));
-
-            // Handle mouse hover
-            if (isMouseOver(moduleX, moduleY, 200, moduleHeight)) {
-                hoveredModule = moduleManager.getModules().indexOf(module);
-                // Draw hover effect
-                fill(matrices, moduleX, moduleY, moduleX + 200, moduleY + moduleHeight, ColorHelper.Argb.getArgb(255, 100, 100, 100));
+        for (Module module : modules) {
+            if (module.getCategory() == Category.COMBAT) {
+                drawModule(matrices, module, 10, 10);
+            } else if (module.getCategory() == Category.MOVEMENT) {
+                drawModule(matrices, module, 220, 10);
+            } else if (module.getCategory() == Category.VISUAL) {
+                drawModule(matrices, module, 10, 220);
             }
-
-            moduleY += 20;
         }
     }
 
-    private void drawSearchBar(MatrixStack matrices, int mouseX, int mouseY) {
-        // Draw search bar background
-        fill(matrices, 10, 10, 200, 30, ColorHelper.Argb.getArgb(255, 50, 50, 50));
+    private void drawModule(MatrixStack matrices, Module module, int x, int y) {
+        fill(matrices, x, y, x + 200, y + 20, new Color(50, 50, 50, 255).getRGB());
 
-        // Draw search bar text
-        drawTextWithShadow(matrices, client.textRenderer, "Search", 15, 15, ColorHelper.Argb.getArgb(255, 255, 255, 255));
+        drawTextWithShadow(matrices, client.textRenderer, module.getName(), x + 10, y + 5, new Color(255, 255, 255, 255).getRGB());
+
+        if (isMouseOver(x, y, 200, 20)) {
+            hoveredModule = moduleManager.getModules().indexOf(module);
+            fill(matrices, x, y, x + 200, y + 20, new Color(100, 100, 100, 255).getRGB());
+        }
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (button == 0) {
-            // Handle module click
             if (hoveredModule != -1) {
                 Module module = modules.get(hoveredModule);
                 module.setEnabled(!module.isEnabled());
@@ -107,14 +70,5 @@ public class ClickGUI extends Screen {
 
     private boolean isMouseOver(int x, int y, int width, int height) {
         return x < client.mouse.getX() && client.mouse.getX() < x + width && y < client.mouse.getY() && client.mouse.getY() < y + height;
-    }
-
-    @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (keyCode == 340) {
-            // Handle right shift press
-            client.setScreen(null);
-        }
-        return super.keyPressed(keyCode, scanCode, modifiers);
     }
 }

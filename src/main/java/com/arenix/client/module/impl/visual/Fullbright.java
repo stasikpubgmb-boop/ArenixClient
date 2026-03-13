@@ -13,17 +13,13 @@ public class Fullbright extends Module {
 
     @Override
     public void onEnable() {
-        super.onEnable();
-        MinecraftClient client = MinecraftClient.getInstance();
-        GameOptions options = client.options;
+        GameOptions options = MinecraftClient.getInstance().options;
         options.gamma = 16f;
     }
 
     @Override
     public void onDisable() {
-        super.onDisable();
-        MinecraftClient client = MinecraftClient.getInstance();
-        GameOptions options = client.options;
+        GameOptions options = MinecraftClient.getInstance().options;
         options.gamma = 1f;
     }
 }

@@ -1,19 +1,25 @@
 package com.arenix.module;
 
 import com.arenix.ArenixClient;
+import com.arenix.client.event.EventBus;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.util.Session;
+
+import java.util.List;
 
 public abstract class Module {
 
     protected final MinecraftClient client = MinecraftClient.getInstance();
+    protected final EventBus eventBus = ArenixClient.INSTANCE.getEventBus();
     private final String name;
     private final Category category;
+    private final KeyBinding keyBinding;
     private boolean enabled;
+    private List<Setting> settings;
 
     public Module(String name, Category category) {
         this.name = name;
         this.category = category;
+        this.keyBinding = new KeyBinding("key." + name, InputUtil.Type.MOUSE, 2, "category." + category.getName());
         this.enabled = false;
     }
 
@@ -31,32 +37,22 @@ public abstract class Module {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
-        if (this.enabled) {
+        if (enabled) {
             onEnable();
         } else {
             onDisable();
         }
     }
 
-    // Called when the module is enabled
     public void onEnable() {
-        // Default implementation does nothing
     }
 
-    // Called when the module is disabled
     public void onDisable() {
-        // Default implementation does nothing
     }
 
-    // Called on every client tick while the module is enabled
     public void onTick() {
-        // Default implementation does nothing
     }
 
-    // Called on render tick while the module is enabled (for visual modules)
     public void onRenderTick() {
-        // Default implementation does nothing
     }
-
-    // Placeholder for future methods like onKeyPress, onPacket, etc.
 }
