@@ -1,7 +1,7 @@
 package com.arenix.module;
 
-import com.arenix.ArenixClient;
 import com.arenix.module.modules.ExampleModule;
+import com.arenix.client.module.impl.combat.Scaffold;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +14,7 @@ public class ModuleManager {
     public ModuleManager() {
         // Register your modules here
         registerModule(new ExampleModule());
+        registerModule(new Scaffold());
         // Add more modules as you create them
     }
 
