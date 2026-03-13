@@ -1,5 +1,6 @@
 package com.arenix;
 
+import com.arenix.event.EventBus;
 import com.arenix.module.ModuleManager;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -16,10 +17,14 @@ public class ArenixClient implements ClientModInitializer {
     private KeyBinding moduleKeybind;
 
     private ModuleManager moduleManager;
+    private EventBus eventBus;
 
     @Override
     public void onInitializeClient() {
         INSTANCE = this;
+
+        // Initialize EventBus
+        eventBus = new EventBus();
 
         // Initialize ModuleManager
         moduleManager = new ModuleManager();
@@ -43,6 +48,10 @@ public class ArenixClient implements ClientModInitializer {
                     moduleManager.toggleModuleList(); // Example method call
                 }
             }
+            // Tick the module manager to process module ticks
+            if (moduleManager != null) {
+                moduleManager.onClientTick();
+            }
         });
 
         System.out.println("Arenix Client Initialized!");
@@ -50,5 +59,9 @@ public class ArenixClient implements ClientModInitializer {
 
     public ModuleManager getModuleManager() {
         return moduleManager;
+    }
+
+    public EventBus getEventBus() {
+        return eventBus;
     }
 }
